@@ -16,7 +16,7 @@ export const getListUsersByOrganisationId = async ({
     endAt: order === 'last' ? pageBreakValue : undefined
   }
 
-  const {data} = await http.get(`/organisations/${organisationId}/users.json`, {params})
+  const { data } = await http.get(`/organisations/${organisationId}/users.json`, { params })
   return apiResponse.transformApiResponseDataToArray(data)
 }
 
@@ -31,13 +31,11 @@ export const createOrganisationUser = async ({
 export const updateOrganisationUser = async ({
   organisationId,
   payload
-}) => {
-  return await http.put(`/organisations/${organisationId}/users/${payload.id}.json`, payload)
-}
+}) =>
+  await http.put(`/organisations/${organisationId}/users/${payload.id}.json`, payload)
 
 export const deleteOrganisationUser = async ({
   organisationId,
   userId
-}) => {
-  return await http.delete(`/organisations/${organisationId}/users/${userId}.json`)
-}
+}) =>
+  await http.delete(`/organisations/${organisationId}/users/${userId}.json`)

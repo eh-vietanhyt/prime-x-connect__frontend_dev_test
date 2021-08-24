@@ -85,7 +85,8 @@ export const createOrUpdateOrganisationUser = createAsyncThunk(
   async (payload, thunkAPI) => {
     const selectedOrganisationId = (thunkAPI.getState()).app.selectedOrganisation.id
 
-    if (!payload.id) return await usersService.createOrganisationUser({ organisationId: selectedOrganisationId, payload })
+    if (!payload.id)
+      return await usersService.createOrganisationUser({ organisationId: selectedOrganisationId, payload })
     return await usersService.updateOrganisationUser({ organisationId: selectedOrganisationId, payload })
   }
 )
@@ -100,16 +101,12 @@ export const deleteOrganisationUser = createAsyncThunk(
 
 export const getAllOrganisations = createAsyncThunk(
   'app/getAllOrganisations',
-  async () => {
-    return await organisationsService.getAllOrganisations()
-  }
+  async () => await organisationsService.getAllOrganisations()
 )
 
 export const createOrganisation = createAsyncThunk(
   'app/createOrganisation',
-  async (payload) => {
-    return await organisationsService.createOrganisation(payload)
-  }
+  async payload => await organisationsService.createOrganisation(payload)
 )
 
 const appSlice = createSlice({

@@ -42,42 +42,44 @@ const UsersTable = ({
     <>
       <Table striped bordered hover className="table">
         <thead>
-        <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Roles</th>
-          <th>Organisation</th>
-          <th>Organisation Features</th>
-          <th>Country</th>
-          <th className="text-end">Action</th>
-        </tr>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Roles</th>
+            <th>Organisation</th>
+            <th>Organisation Features</th>
+            <th>Country</th>
+            <th className="text-end">Action</th>
+          </tr>
         </thead>
         <tbody>
-        {users.map((user, indexUser) => (
-          <tr key={indexUser}>
-            <td>
-              {user.name}
-            </td>
-            <td>
-              {user.email}
-            </td>
-            <td>
-              {user.roles}
-            </td>
-            <td>
-              {user.organisation}
-            </td>
-            <td>
-              {getUserOrganisationFeaturesTxt(user)}
-            </td>
-            <td>
-              {user.country}
-            </td>
-            <td className="text-end">
-              <ButtonGroupWrapper buttons={userRowActions({user, usersQuery, dispatch})} />
-            </td>
-          </tr>
-        ))}
+          {users.map((user, indexUser) => (
+            <tr key={indexUser}>
+              <td>
+                {user.name}
+              </td>
+              <td>
+                {user.email}
+              </td>
+              <td>
+                {user.roles}
+              </td>
+              <td>
+                {user.organisation}
+              </td>
+              <td>
+                {getUserOrganisationFeaturesTxt(user)}
+              </td>
+              <td>
+                {user.country}
+              </td>
+              <td className="text-end">
+                <ButtonGroupWrapper
+                  buttons={userRowActions({ user, usersQuery, dispatch })}
+                />
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
       <Pagination

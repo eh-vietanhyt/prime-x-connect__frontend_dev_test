@@ -1,0 +1,62 @@
+{
+  "extends": [
+    "react-app",
+    "react-app/jest",
+    "airbnb"
+  ],
+  "plugins": [
+    "jsx-a11y"
+  ],
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "import/extensions": "off",
+    "import/no-unresolved": "off",
+    "no-constant-condition": "off",
+    "max-len": ["error", { "code": 120, "tabWidth": 2, "ignoreComments": true, "ignoreUrls": true, "ignoreStrings": true, "ignoreTemplateLiterals": true, "ignorePattern": "^\\s*abort\\s*\\(" }],
+    "strict": "off",
+    "semi": ["error", "never"],
+    "comma-dangle": ["error", "never"],
+    "space-before-function-paren": ["error", { "anonymous": "never", "named": "always" }],
+    "class-methods-use-this": "off",
+    "global-require": "off",
+    "arrow-parens": ["error", "as-needed"],
+    "no-param-reassign": "off",
+    "object-curly-spacing": ["error", "always"],
+    "camelcase": "off",
+    "no-multi-assign": "off",
+    "func-names": "off",
+    "generator-star-spacing": "off",
+    "curly": "off",
+    "nonblock-statement-body-position": "off",
+    "prefer-destructuring": "off",
+    "no-confusing-arrow": "off",
+    "no-nested-ternary": "off",
+    "no-return-await": "off",
+    "no-underscore-dangle": "off",
+    "no-restricted-syntax": "off",
+    "one-var": "off",
+    "no-case-declarations": "off",
+    "no-console": ["error", { "allow": ["warn", "error"] }],
+    "newline-per-chained-call": "off",
+    "object-curly-newline": "off",
+    "no-prototype-builtins": "off",
+    "new-cap": "off",
+    "no-await-in-loop": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "no-use-before-define": "off",
+    "implicit-arrow-linebreak": "off",
+    "import/prefer-default-export": "off",
+    "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
+    "react/prop-types": "off",
+    "react/button-has-type": "off",
+    "jsx-a11y/label-has-associated-control": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "react/require-default-props": "off",
+    "react/forbid-prop-types": "off",
+    "react/no-array-index-key": "off"
+  },
+  "globals": {
+    "use": true
+  }
+}

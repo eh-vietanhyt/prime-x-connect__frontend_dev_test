@@ -9,7 +9,7 @@ const userFormValidationSchema = Yup.object().shape({
   organisationFeatures: Yup.array().of(
     Yup.object().shape({
       label: Yup.string(),
-      value: Yup.string(),
+      value: Yup.string()
     })
   ).length(1)
 })

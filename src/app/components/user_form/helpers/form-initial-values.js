@@ -5,7 +5,7 @@ export const countriesList = ['Vietnam', 'Australia']
 export const organisationFeaturesList = [
   { label: 'Trade Vault', value: 'Trade Vault' },
   { label: 'Inventory', value: 'Inventory' },
-  { label: 'Analytics', value: 'Analytics' },
+  { label: 'Analytics', value: 'Analytics' }
 ]
 
 const formInitialValues = ({

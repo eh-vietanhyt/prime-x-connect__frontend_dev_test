@@ -1,7 +1,7 @@
 import { http, apiResponse } from '../utils'
 
 export async function getAllOrganisations () {
-  const {data} = await http.get('/organisations.json')
+  const { data } = await http.get('/organisations.json')
   return apiResponse.transformApiResponseDataToArray(data)
 }
 

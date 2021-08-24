@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 
+/* eslint no-console: "off" */
 import {
   PageTopHeader,
   LeftSidebar,
@@ -33,7 +34,7 @@ const App = ({
   return (
     <div className="App">
       <PageTopHeader />
-      <Container fluid={true} className="AppContent">
+      <Container fluid className="AppContent">
         <Row>
           <LeftSidebar />
           <WorkspaceContainer>

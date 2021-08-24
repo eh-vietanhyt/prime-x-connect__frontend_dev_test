@@ -14,8 +14,8 @@ build/
 
 # misc
 jsconfig.json
-src/reportWebVitals.ts
-src/serviceWorker.ts
+src/reportWebVitals.js
+src/serviceWorker.js
 .DS_Store
 .env.local
 .env.development.local
