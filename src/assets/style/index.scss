@@ -26,6 +26,7 @@
       .ListOrganisations {
         overflow-y: auto;
         .OrganisationItem {
+          color: var(--bs-body-color);
           height: 59px;
           line-height: 59px;
           cursor: pointer;
@@ -34,7 +35,7 @@
           overflow: hidden;
           text-overflow: ellipsis;
           &:hover,
-          &.Selected {
+          &.active {
             background: #d3f2df;
           }
         }
@@ -50,7 +51,6 @@
       .WorkspaceInner {
       }
       .WorkspaceHeader {
-        z-index: 9999;
         background: white;
         padding: 10px 15px;
         border-bottom: 1px dashed #dee6e9;
@@ -79,4 +79,8 @@
       }
     }
   }
+}
+
+.form-group {
+  margin-bottom: 15px;
 }

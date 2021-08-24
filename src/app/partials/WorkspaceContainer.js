@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col'
 const WorkspaceContainer = ({
   children
 }) => (
-  <Col xs={12} md={9} className="Workspace">
+  <Col xs={12} md={10} className="Workspace">
     <div className="WorkspaceInner">
       {children}
     </div>
@@ -14,7 +14,7 @@ const WorkspaceContainer = ({
 )
 
 WorkspaceContainer.propTypes = {
-  children: propTypes.element
+  children: propTypes.array
 }
 
 export default WorkspaceContainer

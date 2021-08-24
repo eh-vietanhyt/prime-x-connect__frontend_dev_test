@@ -9,8 +9,12 @@ export const initialState = {
   isLoading: false,
   isUpdatingOrganisationUsersList: false,
   isCreatingOrUpdatingUser: false,
+  isCreatingOrganisation: false,
+  isShowingUserFormModal: false,
+  isShowingOrganisationFormModal: false,
   organisations: [],
   selectedOrganisation: {},
+  selectedUser: {},
   usersQuery: {
     limit: PER_PAGE,
     order: 'first',
@@ -40,6 +44,7 @@ export const init = createAsyncThunk(
         query: initialState.usersQuery
       })
       organisationUsersList = apiResponse.getFakePaginationResult({
+        selectedOrganisation,
         query: initialState.usersQuery,
         data: users,
         perPage: PER_PAGE,
@@ -64,14 +69,47 @@ export const getOrganisationUsersList = createAsyncThunk(
 
     const users = await usersService.getListUsersByOrganisationId({
       organisationId: selectedOrganisation.id,
-      query
+      query: query || initialState.usersQuery
     })
     return apiResponse.getFakePaginationResult({
-      query,
+      selectedOrganisation,
+      query: query || initialState.usersQuery,
       data: users,
       perPage: PER_PAGE,
       total: apiResponse.getTotalOrganisationUsers(selectedOrganisation)
     })
+  }
+)
+
+export const createOrUpdateOrganisationUser = createAsyncThunk(
+  'app/createOrUpdateOrganisationUser',
+  async (payload, thunkAPI) => {
+    const selectedOrganisationId = (thunkAPI.getState()).app.selectedOrganisation.id
+
+    if (!payload.id) return await usersService.createOrganisationUser({ organisationId: selectedOrganisationId, payload })
+    return await usersService.updateOrganisationUser({ organisationId: selectedOrganisationId, payload })
+  }
+)
+
+export const deleteOrganisationUser = createAsyncThunk(
+  'app/deleteOrganisationUser',
+  async (userId, thunkAPI) => {
+    const selectedOrganisationId = (thunkAPI.getState()).app.selectedOrganisation.id
+    return await usersService.deleteOrganisationUser({ organisationId: selectedOrganisationId, userId })
+  }
+)
+
+export const getAllOrganisations = createAsyncThunk(
+  'app/getAllOrganisations',
+  async () => {
+    return await organisationsService.getAllOrganisations()
+  }
+)
+
+export const createOrganisation = createAsyncThunk(
+  'app/createOrganisation',
+  async (payload) => {
+    return await organisationsService.createOrganisation(payload)
   }
 )
 
@@ -81,6 +119,15 @@ const appSlice = createSlice({
   reducers: {
     setSelectedOrganisation: (state, action) => {
       state.selectedOrganisation = action.payload
+    },
+    setSelectedUser: (state, action) => {
+      state.selectedUser = action.payload
+    },
+    toggleUserFormModal: (state, action) => {
+      state.isShowingUserFormModal = action.payload
+    },
+    toggleOrganisationFormModal: (state, action) => {
+      state.isShowingOrganisationFormModal = action.payload
     }
   },
   extraReducers: builder => {
@@ -105,7 +152,8 @@ const appSlice = createSlice({
 
     builder.addCase(getOrganisationUsersList.pending, (state, action) => {
       state.isUpdatingOrganisationUsersList = true
-      state.query = action.meta.arg
+      state.usersQuery.order = action.meta.arg.order || initialState.usersQuery.order
+      state.usersQuery.pageBreakValue = action.meta.arg.pageBreakValue || initialState.usersQuery.pageBreakValue
     })
     builder.addCase(getOrganisationUsersList.fulfilled, (state, action) => {
       state.organisationUsersList = action.payload
@@ -114,11 +162,54 @@ const appSlice = createSlice({
     builder.addCase(getOrganisationUsersList.rejected, state => {
       state.isUpdatingOrganisationUsersList = false
     })
+
+    builder.addCase(createOrUpdateOrganisationUser.pending, (state, action) => {
+      state.isCreatingOrUpdatingUser = true
+    })
+    builder.addCase(createOrUpdateOrganisationUser.fulfilled, (state, action) => {
+      state.isCreatingOrUpdatingUser = false
+    })
+    builder.addCase(createOrUpdateOrganisationUser.rejected, state => {
+      state.isCreatingOrUpdatingUser = false
+    })
+    builder.addCase(deleteOrganisationUser.pending, (state, action) => {
+      state.isLoading = true
+    })
+    builder.addCase(deleteOrganisationUser.fulfilled, (state, action) => {
+      state.isLoading = false
+    })
+    builder.addCase(deleteOrganisationUser.rejected, state => {
+      state.isLoading = false
+    })
+
+    builder.addCase(createOrganisation.pending, (state, action) => {
+      state.isCreatingOrganisation = true
+    })
+    builder.addCase(createOrganisation.fulfilled, (state, action) => {
+      state.isCreatingOrganisation = false
+    })
+    builder.addCase(createOrganisation.rejected, state => {
+      state.isCreatingOrganisation = false
+    })
+
+    builder.addCase(getAllOrganisations.pending, (state, action) => {
+      state.isLoading = true
+    })
+    builder.addCase(getAllOrganisations.fulfilled, (state, action) => {
+      state.organisations = action.payload
+      state.isLoading = false
+    })
+    builder.addCase(getAllOrganisations.rejected, state => {
+      state.isLoading = false
+    })
   }
 })
 
 export const {
-  setSelectedOrganisation
+  toggleOrganisationFormModal,
+  toggleUserFormModal,
+  setSelectedOrganisation,
+  setSelectedUser
 } = appSlice.actions
 
 export default appSlice.reducer

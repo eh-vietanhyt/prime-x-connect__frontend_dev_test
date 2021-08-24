@@ -10,9 +10,10 @@ import {
   LeftSidebar,
   WorkspaceContainer,
   WorkspaceHeader,
-  WorkspaceMainArea,
   WorkspaceFooter
 } from './partials'
+
+import UsersManagement from './UsersManagement'
 
 import { actions } from './state_management/actions'
 
@@ -39,7 +40,7 @@ const App = ({
           <LeftSidebar />
           <WorkspaceContainer>
             <WorkspaceHeader />
-            <WorkspaceMainArea />
+            <UsersManagement />
             <WorkspaceFooter />
           </WorkspaceContainer>
         </Row>
