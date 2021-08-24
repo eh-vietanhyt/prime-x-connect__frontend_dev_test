@@ -2,6 +2,9 @@
   position: relative;
   height: 100vh;
   background: #fff;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 
   .PageTopHeader {
     height: 60px;
@@ -22,6 +25,9 @@
     .LeftSidebar {
       background: #fbfcff;
       border-right: 1px solid #eaeff1;
+      height: calc(100vh - 60px);
+      overflow-y: auto;
+      padding-bottom: 30px;
 
       .ListOrganisations {
         overflow-y: auto;
@@ -49,6 +55,9 @@
     .Workspace {
       position: relative;
       .WorkspaceInner {
+        height: calc(100vh - 60px);
+        overflow-y: auto;
+        padding-bottom: 100px;
       }
       .WorkspaceHeader {
         background: white;
