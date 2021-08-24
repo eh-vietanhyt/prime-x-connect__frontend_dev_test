@@ -1,0 +1,82 @@
+.App {
+  position: relative;
+  height: 100vh;
+  background: #fff;
+
+  .PageTopHeader {
+    height: 60px;
+    line-height: 60px;
+    border-bottom: 1px solid #ddd;
+    padding: 0 50px;
+    font-size: 20px;
+    font-weight: bold;
+    background: white;
+  }
+
+  .AppContent {
+
+    .row {
+      //height: calc(100vh - 60px);
+    }
+
+    .LeftSidebar {
+      background: #fbfcff;
+      border-right: 1px solid #eaeff1;
+
+      .ListOrganisations {
+        overflow-y: auto;
+        .OrganisationItem {
+          height: 59px;
+          line-height: 59px;
+          cursor: pointer;
+          padding: 0 15px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          &:hover,
+          &.Selected {
+            background: #d3f2df;
+          }
+        }
+      }
+
+      .AddOrganisationButton {
+        padding: 15px 10px;
+      }
+    }
+
+    .Workspace {
+      position: relative;
+      .WorkspaceInner {
+      }
+      .WorkspaceHeader {
+        z-index: 9999;
+        background: white;
+        padding: 10px 15px;
+        border-bottom: 1px dashed #dee6e9;
+        justify-content: space-between;
+
+        h2 {
+          margin: 0;
+        }
+      }
+
+      .WorkspaceContent {
+        padding: 20px 15px;
+        //height: calc(100vh - 180px);
+        overflow-y: auto;
+      }
+
+      .WorkspaceFooter {
+        background: white;
+        height: 60px;
+        line-height: 60px;
+        border-top: 1px dashed #dee6e9;
+        position: absolute;
+        right: calc(var(--bs-gutter-x) * .5);
+        bottom: 0;
+        left: calc(var(--bs-gutter-x) * .5);
+      }
+    }
+  }
+}
