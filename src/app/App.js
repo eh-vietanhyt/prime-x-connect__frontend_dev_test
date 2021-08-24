@@ -17,8 +17,6 @@ import UsersManagement from './UsersManagement'
 
 import { actions } from './state_management/actions'
 
-/* eslint no-debugger: "off" */
-/* eslint no-console: "off" */
 const App = ({
   initialed,
   dispatch

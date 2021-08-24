@@ -9,8 +9,10 @@ import Button from 'react-bootstrap/Button'
 
 import { actions } from '../../state_management/actions'
 
-import organisationFormInitialValues from './helpers/organisation-form-initial-values'
-import organisationFormValidationSchema from './validation-schema'
+import {
+  formInitialValues,
+  formValidationSchema
+} from './helpers'
 
 const OrganisationForm = ({
   isCreatingOrganisation,
@@ -20,10 +22,10 @@ const OrganisationForm = ({
   const handleCloseModal = () => dispatch(actions.toggleOrganisationFormModal(false))
 
   const onSubmit = async (values, formikActions) => {
-    const action = await dispatch(actions.createOrganisation({ name: values.name }))
+    const action = await dispatch(actions.createOrganisation(values))
 
     if (action.meta.requestStatus === 'fulfilled') {
-      dispatch(actions.getAllOrganisations())
+      await dispatch(actions.getAllOrganisations())
       handleCloseModal()
     } else {
       formikActions.setErrors({
@@ -35,8 +37,8 @@ const OrganisationForm = ({
   return (
     <Modal show={isShowingOrganisationFormModal} onHide={handleCloseModal}>
       <Formik
-        initialValues={organisationFormInitialValues}
-        validationSchema={organisationFormValidationSchema}
+        initialValues={formInitialValues}
+        validationSchema={formValidationSchema}
         onSubmit={onSubmit}
       >
       {({
@@ -71,7 +73,7 @@ const OrganisationForm = ({
               Close
             </Button>
             <Button type="submit" variant="primary" disabled={isCreatingOrganisation}>
-              {isCreatingOrganisation ? 'Creating...' : 'Create'}
+              {isCreatingOrganisation ? 'Submitting...' : 'Create'}
             </Button>
           </Modal.Footer>
         </Form>

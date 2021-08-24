@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { organisationsService, usersService } from '../../services'
 import { apiResponse } from '../../utils'
 
-const PER_PAGE = 10
+export const PER_PAGE = 10
 
 export const initialState = {
   initialed: 'pending',
@@ -29,7 +29,6 @@ export const initialState = {
   }
 }
 
-/* eslint no-debugger: "off" */
 export const init = createAsyncThunk(
   'app/init',
   async () => {

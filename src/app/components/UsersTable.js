@@ -1,22 +1,22 @@
 import React from 'react'
 import propTypes from 'prop-types'
-import Table from 'react-bootstrap/Table'
 import { connect } from 'react-redux'
 
-import { ButtonGroupWrapper } from '../../share/components'
-import { userRowActions, getUserOrganisationFeaturesTxt } from '../helpers'
+import Table from 'react-bootstrap/Table'
+
+import { ButtonGroupWrapper, Pagination } from '../../share/components'
+import { userRowActions, getUserOrganisationFeaturesTxt } from './helpers'
 
 import { actions } from '../state_management/actions'
 
-/* eslint no-debugger: "off" */
-/* eslint no-console: "off" */
+import { PER_PAGE } from '../state_management/slice'
+
 const UsersTable = ({
   isUpdatingOrganisationUsersList,
   organisationUsersList: {
     data: users,
     hasNextPage,
-    hasPreviousPage,
-    total
+    hasPreviousPage
   },
   usersQuery,
 
@@ -25,7 +25,7 @@ const UsersTable = ({
   const onGoToPrevPage = async () => {
     await dispatch(actions.getOrganisationUsersList({
       order: 'last',
-      limit: 10,
+      limit: PER_PAGE,
       pageBreakValue: users[0].createdAt - 1
     }))
   }
@@ -33,8 +33,8 @@ const UsersTable = ({
   const onGoToNextPage = async () => {
     await dispatch(actions.getOrganisationUsersList({
       order: 'first',
-      limit: 10,
-      pageBreakValue: users[9].createdAt + 1
+      limit: PER_PAGE,
+      pageBreakValue: users[users.length - 1].createdAt + 1
     }))
   }
 
@@ -80,30 +80,13 @@ const UsersTable = ({
         ))}
         </tbody>
       </Table>
-      <div className="d-flex justify-content-center">
-        <div
-          className="btn-group"
-          role="group"
-          aria-label="Basic outlined example"
-        >
-          <button
-            type="button"
-            className="btn btn-outline-primary"
-            disabled={!hasPreviousPage || isUpdatingOrganisationUsersList}
-            onClick={onGoToPrevPage}
-          >
-            Prev
-          </button>
-          <button
-            type="button"
-            className="btn btn-outline-primary"
-            disabled={!hasNextPage || isUpdatingOrganisationUsersList}
-            onClick={onGoToNextPage}
-          >
-            Next
-          </button>
-        </div>
-      </div>
+      <Pagination
+        hasPreviousPage={hasPreviousPage}
+        hasNextPage={hasNextPage}
+        isLoading={isUpdatingOrganisationUsersList}
+        onGoToPrevPage={onGoToPrevPage}
+        onGoToNextPage={onGoToNextPage}
+      />
     </>
   )
 }

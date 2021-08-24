@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react'
-import cloneDeep from 'lodash/cloneDeep'
+import React from 'react'
 import propTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Formik } from 'formik'
-
-import { actions } from '../../state_management/actions'
 
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import MultiSelect from '../../../share/components/MultiSelect'
 
-import userFormInitialValues, { rolesList, organisationFeaturesList, countriesList } from './helpers/user-form-initial-values'
-import userFormValidationSchema from './validation-schema'
+import { actions } from '../../state_management/actions'
 
-/* eslint no-debugger: "off" */
-/* eslint no-unused-vars: "off" */
-/* eslint no-console: "off" */
+import formInitialValues, {
+  rolesList,
+  organisationFeaturesList,
+  countriesList
+} from './helpers/form-initial-values'
+import userFormValidationSchema from './helpers/form-validation-schema'
+
 const UserModal = ({
   selectedUser,
   selectedOrganisation,
@@ -25,7 +25,7 @@ const UserModal = ({
   usersQuery,
   dispatch,
 }) => {
-  const isUpdating = !!selectedUser.id
+  const isUpdate = !!selectedUser.id
 
   const handleCloseModal = () => {
     dispatch(actions.toggleUserFormModal(false))
@@ -36,7 +36,7 @@ const UserModal = ({
     const action = await dispatch(actions.createOrUpdateOrganisationUser(values))
 
     if (action.meta.requestStatus === 'fulfilled') {
-      dispatch(actions.getOrganisationUsersList(usersQuery))
+      await dispatch(actions.getOrganisationUsersList(usersQuery))
       handleCloseModal()
     } else {
       formikActions.setErrors({
@@ -49,7 +49,7 @@ const UserModal = ({
   return (
     <Modal show={isShowingUserFormModal} onHide={handleCloseModal}>
       <Formik
-        initialValues={userFormInitialValues({
+        initialValues={formInitialValues({
           user: selectedUser,
           organisation: selectedOrganisation
         })}
@@ -61,11 +61,12 @@ const UserModal = ({
         handleChange,
         setFieldValue,
         values,
+        touched,
         errors
       }) => (
         <Form noValidate onSubmit={handleSubmit}>
           <Modal.Header>
-            <Modal.Title>{`${isUpdating ? 'Update': 'Create'} User`}</Modal.Title>
+            <Modal.Title>{`${isUpdate ? 'Update': 'Create'} User`}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form.Group controlId="name">
@@ -76,7 +77,7 @@ const UserModal = ({
                 placeholder="Name"
                 required
                 value={values.name}
-                isInvalid={!!errors.name}
+                isInvalid={!!errors.name && touched.name}
                 onChange={handleChange}
               />
               <Form.Control.Feedback type="invalid">
@@ -91,7 +92,7 @@ const UserModal = ({
                 placeholder="Email"
                 required
                 value={values.email}
-                isInvalid={!!errors.email}
+                isInvalid={!!errors.email && touched.email}
                 onChange={handleChange}
               />
               <Form.Control.Feedback type="invalid">
@@ -106,7 +107,7 @@ const UserModal = ({
                 placeholder="Roles"
                 required
                 value={values.roles}
-                isInvalid={!!errors.roles}
+                isInvalid={!!errors.roles && touched.roles}
                 onChange={handleChange}
                 as="select"
               >
@@ -146,7 +147,7 @@ const UserModal = ({
                 placeholder="Country"
                 required
                 value={values.country}
-                isInvalid={!!errors.country}
+                isInvalid={!!errors.country && touched.country}
                 onChange={handleChange}
                 as="select"
               >
@@ -165,7 +166,13 @@ const UserModal = ({
               Close
             </Button>
             <Button variant="primary" type="submit" disabled={isCreatingOrUpdatingUser}>
-              {isUpdating ? 'Update' : 'Create'}
+              {
+                isCreatingOrUpdatingUser
+                  ? 'Submitting...'
+                  : isUpdate
+                  ? 'Update'
+                  : 'Create'
+              }
             </Button>
           </Modal.Footer>
         </Form>

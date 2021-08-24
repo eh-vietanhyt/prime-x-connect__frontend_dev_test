@@ -8,7 +8,6 @@ import UserForm from './components/user_form/UserForm'
 
 import { actions } from './state_management/actions'
 
-/* eslint react-hooks/exhaustive-deps: "off" */
 const UsersManagement = ({
   selectedOrganisation,
   usersQuery,

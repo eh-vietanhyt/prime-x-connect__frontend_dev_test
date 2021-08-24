@@ -1,6 +1,5 @@
-import { actions } from '../state_management/actions'
+import { actions } from '../../state_management/actions'
 
-/* eslint no-debugger: "off" */
 const userRowActions = ({
   user,
   usersQuery,
