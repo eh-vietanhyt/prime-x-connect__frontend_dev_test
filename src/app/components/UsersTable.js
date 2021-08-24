@@ -18,6 +18,7 @@ const UsersTable = ({
     hasPreviousPage,
     total
   },
+  usersQuery,
 
   dispatch
 }) => {
@@ -73,7 +74,7 @@ const UsersTable = ({
               {user.country}
             </td>
             <td className="text-end">
-              <ButtonGroupWrapper buttons={userRowActions({user, dispatch})} />
+              <ButtonGroupWrapper buttons={userRowActions({user, usersQuery, dispatch})} />
             </td>
           </tr>
         ))}
@@ -110,6 +111,7 @@ const UsersTable = ({
 UsersTable.propTypes = {
   isUpdatingOrganisationUsersList: propTypes.bool,
   organisationUsersList: propTypes.object,
+  usersQuery: propTypes.object,
   dispatch: propTypes.func
 }
 

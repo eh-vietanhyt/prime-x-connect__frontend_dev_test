@@ -3,6 +3,7 @@ import { actions } from '../state_management/actions'
 /* eslint no-debugger: "off" */
 const userRowActions = ({
   user,
+  usersQuery,
   dispatch
 }) => ([
   {
@@ -17,8 +18,8 @@ const userRowActions = ({
     variant: 'danger',
     label: 'Delete',
     onClick: () => {
-      dispatch(actions.deleteOrganisationUser(user.id)).then((data) => {
-        dispatch(actions.getOrganisationUsersList()).then(() => {})
+      dispatch(actions.deleteOrganisationUser(user.id)).then(() => {
+        dispatch(actions.getOrganisationUsersList(usersQuery))
       })
     }
   }

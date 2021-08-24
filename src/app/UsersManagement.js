@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react'
+import propTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import UsersTable from './components/UsersTable'
@@ -7,20 +8,15 @@ import UserForm from './components/user_form/UserForm'
 
 import { actions } from './state_management/actions'
 
-/* eslint no-debugger: "off" */
-/* eslint no-console: "off" */
-/* eslint react/prop-types: "off" */
 /* eslint react-hooks/exhaustive-deps: "off" */
 const UsersManagement = ({
   selectedOrganisation,
-  organisationUsersList: {
-    data: users
-  },
+  usersQuery,
 
   dispatch
 }) => {
   useEffect(() => {
-    dispatch(actions.getOrganisationUsersList()).then(data => {debugger})
+    dispatch(actions.getOrganisationUsersList(usersQuery))
   }, [selectedOrganisation.id])
 
   return (
@@ -32,18 +28,11 @@ const UsersManagement = ({
   )
 }
 
-// ListUser.propTypes = {
-//   listUsers: PropTypes.array,
-//   organisation: PropTypes.object,
-//   showUserModal: PropTypes.func,
-//   deleteUser: PropTypes.func,
-//   canGoPrev: PropTypes.bool,
-//   canGoNext: PropTypes.bool,
-//   handleGoPrev: PropTypes.func,
-//   handleGoNext: PropTypes.func,
-//   store: PropTypes.any,
-//   dispatch: PropTypes.func
-// }
+UsersManagement.propTypes = {
+  selectedOrganisation: propTypes.object,
+  usersQuery: propTypes.object,
+  dispatch: propTypes.func
+}
 
 export default connect(state => ({
   ...state.app
