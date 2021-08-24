@@ -80,6 +80,17 @@ const UsersTable = ({
               </td>
             </tr>
           ))}
+          {
+            !users.length
+              ? (
+                <tr>
+                  <td colSpan="7">
+                    No data
+                  </td>
+                </tr>
+              )
+              : null
+          }
         </tbody>
       </Table>
       <Pagination
