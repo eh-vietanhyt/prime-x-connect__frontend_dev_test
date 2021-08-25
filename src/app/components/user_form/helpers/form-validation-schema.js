@@ -11,7 +11,7 @@ const userFormValidationSchema = Yup.object().shape({
       label: Yup.string(),
       value: Yup.string()
     })
-  ).length(1)
+  )
 })
 
 export default userFormValidationSchema
