@@ -3,38 +3,29 @@ import propTypes from 'prop-types'
 import { connect } from 'react-redux'
 
 import Table from 'react-bootstrap/Table'
+import Pagination from 'react-bootstrap/Pagination'
 
-import { ButtonGroupWrapper, Pagination } from '../../share/components'
+import { ButtonGroupWrapper } from '../../share/components'
 import { userRowActions, getUserOrganisationFeaturesTxt } from './helpers'
 
 import { actions } from '../state_management/actions'
 
-import { PER_PAGE } from '../state_management/slice'
-
 const UsersTable = ({
-  isUpdatingOrganisationUsersList,
+  selectedOrganisation,
   organisationUsersList: {
     data: users,
+    currentPage,
     hasNextPage,
-    hasPreviousPage
+    hasPreviousPage,
+    totalPages
   },
-  usersQuery,
 
   dispatch
 }) => {
-  const onGoToPrevPage = async () => {
-    await dispatch(actions.getOrganisationUsersList({
-      order: 'last',
-      limit: PER_PAGE,
-      pageBreakValue: users[0].createdAt - 1
-    }))
-  }
-
-  const onGoToNextPage = async () => {
-    await dispatch(actions.getOrganisationUsersList({
-      order: 'first',
-      limit: PER_PAGE,
-      pageBreakValue: users[users.length - 1].createdAt + 1
+  const goToPage = page => {
+    dispatch(actions.goToPage({
+      selectedOrganisation,
+      page
     }))
   }
 
@@ -75,7 +66,7 @@ const UsersTable = ({
               </td>
               <td className="text-end">
                 <ButtonGroupWrapper
-                  buttons={userRowActions({ user, usersQuery, dispatch })}
+                  buttons={userRowActions({ user, dispatch })}
                 />
               </td>
             </tr>
@@ -93,21 +84,27 @@ const UsersTable = ({
           }
         </tbody>
       </Table>
-      <Pagination
-        hasPreviousPage={hasPreviousPage}
-        hasNextPage={hasNextPage}
-        isLoading={isUpdatingOrganisationUsersList}
-        onGoToPrevPage={onGoToPrevPage}
-        onGoToNextPage={onGoToNextPage}
-      />
+      <Pagination>
+        <Pagination.Prev disabled={!hasPreviousPage} onClick={() => goToPage(currentPage - 1)} />
+        {
+          [...Array(totalPages).keys()].map(idx => (
+            <Pagination.Item
+              active={currentPage === idx + 1}
+              onClick={() => goToPage(idx + 1)}
+            >
+              {idx + 1}
+            </Pagination.Item>
+          ))
+        }
+        <Pagination.Next disabled={!hasNextPage} onClick={() => goToPage(currentPage + 1)} />
+      </Pagination>
     </>
   )
 }
 
 UsersTable.propTypes = {
-  isUpdatingOrganisationUsersList: propTypes.bool,
+  selectedOrganisation: propTypes.object,
   organisationUsersList: propTypes.object,
-  usersQuery: propTypes.object,
   dispatch: propTypes.func
 }
 

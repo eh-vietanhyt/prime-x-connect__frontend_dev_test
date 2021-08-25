@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { organisationsService, usersService } from '../../services'
-import { apiResponse } from '../../utils'
+import { frontendPagination } from '../../utils'
 
 export const PER_PAGE = 10
 
+/* eslint no-debugger: "off" */
 export const initialState = {
   initialed: 'pending',
   isLoading: false,
@@ -15,14 +16,11 @@ export const initialState = {
   organisations: [],
   selectedOrganisation: {},
   selectedUser: {},
-  usersQuery: {
-    limit: PER_PAGE,
-    order: 'first',
-    pageBreakValue: 0
-  },
   organisationUsersList: {
     data: [],
     perPage: PER_PAGE,
+    currentPage: 1,
+    totalPages: 1,
     hasNextPage: false,
     hasPreviousPage: false,
     total: 0
@@ -31,51 +29,19 @@ export const initialState = {
 
 export const init = createAsyncThunk(
   'app/init',
-  async () => {
+  async (organisationId, thunkAPI) => {
+    let selectedOrganisation = (thunkAPI.getState()).app.selectedOrganisation
     const organisations = await organisationsService.getAllOrganisations()
-    const selectedOrganisation = (organisations || [])[0] || initialState.selectedOrganisation
-
-    let organisationUsersList = initialState.organisationUsersList
 
     if (selectedOrganisation.id) {
-      const users = await usersService.getListUsersByOrganisationId({
-        organisationId: selectedOrganisation.id,
-        query: initialState.usersQuery
-      })
-      organisationUsersList = apiResponse.getFakePaginationResult({
-        selectedOrganisation,
-        query: initialState.usersQuery,
-        data: users,
-        perPage: PER_PAGE,
-        total: apiResponse.getTotalOrganisationUsers(selectedOrganisation)
-      })
+      selectedOrganisation = (organisations || []).find(org => org.id === selectedOrganisation.id)
+    } else {
+      selectedOrganisation = (organisations || [])[0] || initialState.selectedOrganisation
     }
 
-    return {
+    return ({
       organisations,
-      selectedOrganisation,
-      organisationUsersList
-    }
-  }
-)
-
-export const getOrganisationUsersList = createAsyncThunk(
-  'app/getOrganisationUsersList',
-  async (query, thunkAPI) => {
-    const selectedOrganisation = (thunkAPI.getState()).app.selectedOrganisation
-
-    if (!selectedOrganisation.id) return initialState.organisationUsersList
-
-    const users = await usersService.getListUsersByOrganisationId({
-      organisationId: selectedOrganisation.id,
-      query: query || initialState.usersQuery
-    })
-    return apiResponse.getFakePaginationResult({
-      selectedOrganisation,
-      query: query || initialState.usersQuery,
-      data: users,
-      perPage: PER_PAGE,
-      total: apiResponse.getTotalOrganisationUsers(selectedOrganisation)
+      selectedOrganisation
     })
   }
 )
@@ -115,6 +81,11 @@ const appSlice = createSlice({
   reducers: {
     setSelectedOrganisation: (state, action) => {
       state.selectedOrganisation = action.payload
+      state.organisationUsersList = frontendPagination.getPaginatedData({
+        data: action.payload.users || [],
+        perPage: PER_PAGE,
+        currentPage: 1
+      })
     },
     setSelectedUser: (state, action) => {
       state.selectedUser = action.payload
@@ -124,6 +95,13 @@ const appSlice = createSlice({
     },
     toggleOrganisationFormModal: (state, action) => {
       state.isShowingOrganisationFormModal = action.payload
+    },
+    goToPage: (state, action) => {
+      state.organisationUsersList = frontendPagination.getPaginatedData({
+        data: action.payload.selectedOrganisation.users,
+        perPage: PER_PAGE,
+        currentPage: action.payload.page
+      })
     }
   },
   extraReducers: builder => {
@@ -135,7 +113,13 @@ const appSlice = createSlice({
     builder.addCase(init.fulfilled, (state, action) => {
       state.organisations = action.payload.organisations
       state.selectedOrganisation = action.payload.selectedOrganisation
-      state.organisationUsersList = action.payload.organisationUsersList
+
+      state.organisationUsersList = frontendPagination.getPaginatedData({
+        data: action.payload.selectedOrganisation.users,
+        perPage: PER_PAGE,
+        currentPage: 1
+      })
+
       state.initialed = 'fulfilled'
       state.isLoading = false
       state.isUpdatingOrganisationUsersList = false
@@ -146,49 +130,36 @@ const appSlice = createSlice({
       state.isUpdatingOrganisationUsersList = false
     })
 
-    builder.addCase(getOrganisationUsersList.pending, (state, action) => {
-      state.isUpdatingOrganisationUsersList = true
-      state.usersQuery.order = action.meta.arg.order || initialState.usersQuery.order
-      state.usersQuery.pageBreakValue = action.meta.arg.pageBreakValue || initialState.usersQuery.pageBreakValue
-    })
-    builder.addCase(getOrganisationUsersList.fulfilled, (state, action) => {
-      state.organisationUsersList = action.payload
-      state.isUpdatingOrganisationUsersList = false
-    })
-    builder.addCase(getOrganisationUsersList.rejected, state => {
-      state.isUpdatingOrganisationUsersList = false
-    })
-
-    builder.addCase(createOrUpdateOrganisationUser.pending, (state, action) => {
+    builder.addCase(createOrUpdateOrganisationUser.pending, state => {
       state.isCreatingOrUpdatingUser = true
     })
-    builder.addCase(createOrUpdateOrganisationUser.fulfilled, (state, action) => {
+    builder.addCase(createOrUpdateOrganisationUser.fulfilled, state => {
       state.isCreatingOrUpdatingUser = false
     })
     builder.addCase(createOrUpdateOrganisationUser.rejected, state => {
       state.isCreatingOrUpdatingUser = false
     })
-    builder.addCase(deleteOrganisationUser.pending, (state, action) => {
+    builder.addCase(deleteOrganisationUser.pending, state => {
       state.isLoading = true
     })
-    builder.addCase(deleteOrganisationUser.fulfilled, (state, action) => {
+    builder.addCase(deleteOrganisationUser.fulfilled, state => {
       state.isLoading = false
     })
     builder.addCase(deleteOrganisationUser.rejected, state => {
       state.isLoading = false
     })
 
-    builder.addCase(createOrganisation.pending, (state, action) => {
+    builder.addCase(createOrganisation.pending, state => {
       state.isCreatingOrganisation = true
     })
-    builder.addCase(createOrganisation.fulfilled, (state, action) => {
+    builder.addCase(createOrganisation.fulfilled, state => {
       state.isCreatingOrganisation = false
     })
     builder.addCase(createOrganisation.rejected, state => {
       state.isCreatingOrganisation = false
     })
 
-    builder.addCase(getAllOrganisations.pending, (state, action) => {
+    builder.addCase(getAllOrganisations.pending, state => {
       state.isLoading = true
     })
     builder.addCase(getAllOrganisations.fulfilled, (state, action) => {
@@ -205,7 +176,8 @@ export const {
   toggleOrganisationFormModal,
   toggleUserFormModal,
   setSelectedOrganisation,
-  setSelectedUser
+  setSelectedUser,
+  goToPage
 } = appSlice.actions
 
 export default appSlice.reducer

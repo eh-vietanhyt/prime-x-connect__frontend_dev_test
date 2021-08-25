@@ -2,7 +2,6 @@ import { actions } from '../../state_management/actions'
 
 const userRowActions = ({
   user,
-  usersQuery,
   dispatch
 }) => ([
   {
@@ -18,7 +17,7 @@ const userRowActions = ({
     label: 'Delete',
     onClick: () => {
       dispatch(actions.deleteOrganisationUser(user.id)).then(() => {
-        dispatch(actions.getOrganisationUsersList(usersQuery))
+        dispatch(actions.init())
       })
     }
   }

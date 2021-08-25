@@ -23,7 +23,6 @@ const UserModal = ({
   selectedOrganisation,
   isShowingUserFormModal,
   isCreatingOrUpdatingUser,
-  usersQuery,
   dispatch
 }) => {
   const isUpdate = !!selectedUser.id
@@ -37,7 +36,7 @@ const UserModal = ({
     const action = await dispatch(actions.createOrUpdateOrganisationUser(values))
 
     if (action.meta.requestStatus === 'fulfilled') {
-      await dispatch(actions.getOrganisationUsersList(usersQuery))
+      await dispatch(actions.init())
       handleCloseModal()
     } else {
       formikActions.setErrors({
@@ -187,7 +186,6 @@ UserModal.propTypes = {
   selectedOrganisation: propTypes.object,
   isShowingUserFormModal: propTypes.bool,
   isCreatingOrUpdatingUser: propTypes.bool,
-  usersQuery: propTypes.object,
   dispatch: propTypes.func
 }
 

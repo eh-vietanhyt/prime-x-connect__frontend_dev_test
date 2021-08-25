@@ -14,7 +14,9 @@ const LeftSidebar = ({
   dispatch
 }) => {
   const onOpenOrganisationFormModal = () => dispatch(actions.toggleOrganisationFormModal(true))
-  const onSetSelectedOrganisation = organisation => dispatch(actions.setSelectedOrganisation(organisation))
+  const onSetSelectedOrganisation = organisation => {
+    dispatch(actions.setSelectedOrganisation(organisation))
+  }
 
   return (
     <Col xs={12} md={2} className="LeftSidebar">
