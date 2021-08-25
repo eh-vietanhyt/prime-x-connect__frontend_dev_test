@@ -89,6 +89,7 @@ const UsersTable = ({
         {
           [...Array(totalPages).keys()].map(idx => (
             <Pagination.Item
+              key={idx}
               active={currentPage === idx + 1}
               onClick={() => goToPage(idx + 1)}
             >
