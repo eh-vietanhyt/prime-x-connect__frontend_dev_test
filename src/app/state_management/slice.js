@@ -24,8 +24,7 @@ export const initialState = {
     data: [],
     perPage: PER_PAGE,
     hasNextPage: false,
-    hasPreviousPage: false,
-    total: 0
+    hasPreviousPage: false
   }
 }
 
@@ -46,8 +45,7 @@ export const init = createAsyncThunk(
         selectedOrganisation,
         query: initialState.usersQuery,
         data: users,
-        perPage: PER_PAGE,
-        total: apiResponse.getTotalOrganisationUsers(selectedOrganisation)
+        perPage: PER_PAGE
       })
     }
 
@@ -68,14 +66,13 @@ export const getOrganisationUsersList = createAsyncThunk(
 
     const users = await usersService.getListUsersByOrganisationId({
       organisationId: selectedOrganisation.id,
-      query: query || initialState.usersQuery
+      query
     })
     return apiResponse.getFakePaginationResult({
       selectedOrganisation,
-      query: query || initialState.usersQuery,
+      query,
       data: users,
-      perPage: PER_PAGE,
-      total: apiResponse.getTotalOrganisationUsers(selectedOrganisation)
+      perPage: PER_PAGE
     })
   }
 )
