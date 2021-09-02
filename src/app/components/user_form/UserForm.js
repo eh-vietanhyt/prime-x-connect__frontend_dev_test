@@ -9,6 +9,7 @@ import Form from 'react-bootstrap/Form'
 import MultiSelect from '../../../share/components/MultiSelect'
 
 import { actions } from '../../state_management/actions'
+import { initialState } from '../../state_management/slice'
 
 import formInitialValues, {
   rolesList,
@@ -23,7 +24,6 @@ const UserModal = ({
   selectedOrganisation,
   isShowingUserFormModal,
   isCreatingOrUpdatingUser,
-  usersQuery,
   dispatch
 }) => {
   const isUpdate = !!selectedUser.id
@@ -37,7 +37,7 @@ const UserModal = ({
     const action = await dispatch(actions.createOrUpdateOrganisationUser(values))
 
     if (action.meta.requestStatus === 'fulfilled') {
-      await dispatch(actions.getOrganisationUsersList(usersQuery))
+      await dispatch(actions.getOrganisationUsersList(initialState.usersQuery))
       handleCloseModal()
     } else {
       formikActions.setErrors({
@@ -187,7 +187,6 @@ UserModal.propTypes = {
   selectedOrganisation: propTypes.object,
   isShowingUserFormModal: propTypes.bool,
   isCreatingOrUpdatingUser: propTypes.bool,
-  usersQuery: propTypes.object,
   dispatch: propTypes.func
 }
 

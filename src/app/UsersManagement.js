@@ -7,15 +7,15 @@ import OrganisationForm from './components/organisation_form/OrganisationForm'
 import UserForm from './components/user_form/UserForm'
 
 import { actions } from './state_management/actions'
+import { initialState } from './state_management/slice'
 
 const UsersManagement = ({
   selectedOrganisation,
-  usersQuery,
 
   dispatch
 }) => {
   useEffect(() => {
-    dispatch(actions.getOrganisationUsersList(usersQuery))
+    dispatch(actions.getOrganisationUsersList(initialState.usersQuery))
   }, [selectedOrganisation.id])
 
   return (
@@ -29,7 +29,6 @@ const UsersManagement = ({
 
 UsersManagement.propTypes = {
   selectedOrganisation: propTypes.object,
-  usersQuery: propTypes.object,
   dispatch: propTypes.func
 }
 

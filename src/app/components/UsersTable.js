@@ -11,7 +11,6 @@ const UsersTable = ({
   organisationUsersList: {
     data: users
   },
-  usersQuery,
 
   dispatch
 }) => (
@@ -51,7 +50,7 @@ const UsersTable = ({
             </td>
             <td className="text-end">
               <ButtonGroupWrapper
-                buttons={userRowActions({ user, usersQuery, dispatch })}
+                buttons={userRowActions({ user, dispatch })}
               />
             </td>
           </tr>
@@ -75,7 +74,6 @@ const UsersTable = ({
 
 UsersTable.propTypes = {
   organisationUsersList: propTypes.object,
-  usersQuery: propTypes.object,
   dispatch: propTypes.func
 }
 

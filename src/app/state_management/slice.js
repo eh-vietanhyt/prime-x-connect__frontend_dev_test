@@ -156,36 +156,36 @@ const appSlice = createSlice({
       state.isUpdatingOrganisationUsersList = false
     })
 
-    builder.addCase(createOrUpdateOrganisationUser.pending, (state, action) => {
+    builder.addCase(createOrUpdateOrganisationUser.pending, state => {
       state.isCreatingOrUpdatingUser = true
     })
-    builder.addCase(createOrUpdateOrganisationUser.fulfilled, (state, action) => {
+    builder.addCase(createOrUpdateOrganisationUser.fulfilled, state => {
       state.isCreatingOrUpdatingUser = false
     })
     builder.addCase(createOrUpdateOrganisationUser.rejected, state => {
       state.isCreatingOrUpdatingUser = false
     })
-    builder.addCase(deleteOrganisationUser.pending, (state, action) => {
+    builder.addCase(deleteOrganisationUser.pending, state => {
       state.isLoading = true
     })
-    builder.addCase(deleteOrganisationUser.fulfilled, (state, action) => {
+    builder.addCase(deleteOrganisationUser.fulfilled, state => {
       state.isLoading = false
     })
     builder.addCase(deleteOrganisationUser.rejected, state => {
       state.isLoading = false
     })
 
-    builder.addCase(createOrganisation.pending, (state, action) => {
+    builder.addCase(createOrganisation.pending, state => {
       state.isCreatingOrganisation = true
     })
-    builder.addCase(createOrganisation.fulfilled, (state, action) => {
+    builder.addCase(createOrganisation.fulfilled, state => {
       state.isCreatingOrganisation = false
     })
     builder.addCase(createOrganisation.rejected, state => {
       state.isCreatingOrganisation = false
     })
 
-    builder.addCase(getAllOrganisations.pending, (state, action) => {
+    builder.addCase(getAllOrganisations.pending, state => {
       state.isLoading = true
     })
     builder.addCase(getAllOrganisations.fulfilled, (state, action) => {
